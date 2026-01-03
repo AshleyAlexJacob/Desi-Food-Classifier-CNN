@@ -8,6 +8,8 @@ data/raw/*
 # C extensions
 *.so
 data/processed/test/
+data/processed/train/
+
 
 # Distribution / packaging
 .Python
