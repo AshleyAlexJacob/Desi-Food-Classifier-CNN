@@ -19,3 +19,7 @@ The purpose of this repository is to serve as a base template for deep learning 
 
 2. Install dependencies
    ` uv sync`
+
+#### Remove .DS_Store
+
+find ./data/raw/ -type f -name ".DS_Store" -delete

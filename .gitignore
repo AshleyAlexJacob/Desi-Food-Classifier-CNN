@@ -7,6 +7,7 @@ __pycache__/
 data/raw/*
 # C extensions
 *.so
+data/processed/test/
 
 # Distribution / packaging
 .Python
