@@ -9,7 +9,7 @@ data/raw/*
 *.so
 data/processed/test/
 data/processed/train/
-
+models/
 
 # Distribution / packaging
 .Python

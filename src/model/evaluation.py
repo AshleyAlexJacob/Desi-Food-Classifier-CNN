@@ -8,6 +8,7 @@ class Evaluator:
         self.data = data
         self.model = model
         self.device = device
+        self.loss = torch.nn.CrossEntropyLoss()
         
     def start_evaluation_loop(self, epoch):
         try:
@@ -17,8 +18,10 @@ class Evaluator:
             validation_losses = []
             for batch, (x, y) in enumerate(self.data):
                 with torch.no_grad():
-                    prediction = self.model(x.to(torch.device(self.device)))
-                    validation_loss = self.loss(prediction, y.to(torch.device(self.device)))
+                    x = x.to(torch.device(self.device))
+                    y = y.to(torch.device(self.device))
+                    prediction = self.model(x)
+                    validation_loss = self.loss(prediction, y)
                     validation_losses.append(validation_loss.item())
                     # predicted class
                     _, predicted = torch.max(prediction.data, 1)
@@ -28,8 +31,8 @@ class Evaluator:
 
                     if batch % 5 == 0:
                         print(f"Validation-> Epoch {epoch} -> Batch No{batch}: {validation_loss.item():.4f}")
-            epoch_acc = 100. * correct / total
-            average_epoch_validation_loss = sum(validation_losses/len(validation_losses))
+            epoch_acc = 100.0 * correct / total if total > 0 else 0.0
+            average_epoch_validation_loss = (sum(validation_losses) / len(validation_losses)) if validation_losses else 0.0
             print(f"Average Epoch Validation Loss {epoch} -> {average_epoch_validation_loss}")
             print(f"Validation-> Epoch {epoch}: {epoch_acc}")
             return average_epoch_validation_loss, validation_losses, epoch_acc

@@ -23,8 +23,10 @@ class Trainer:
             total = 0
             for batch, (x, y) in enumerate(self.data):
                 # forward pass
-                prediction = self.model(x.to(torch.device(self.device)))
-                training_loss = self.loss(prediction, y.to(torch.device(self.device)))
+                x = x.to(torch.device(self.device))
+                y = y.to(torch.device(self.device))
+                prediction = self.model(x)
+                training_loss = self.loss(prediction, y)
                 training_losses.append(training_loss.item())
 
                 # backward pass
@@ -36,13 +38,12 @@ class Trainer:
                 _, predicted = torch.max(prediction.data, 1)
                 # ground class
                 total += y.size(0)
-              
                 correct += (predicted == y).sum().item()
 
                 if batch % 5 == 0:
                     print(f"Training-> Epoch {epoch} -> Batch No{batch}: {training_loss.item():.4f}")
-            epoch_acc = 100. * correct / total
-            average_epoch_training_loss = sum(training_losses/len(training_losses))
+            epoch_acc = 100.0 * correct / total if total > 0 else 0.0
+            average_epoch_training_loss = (sum(training_losses) / len(training_losses)) if training_losses else 0.0
 
             print(f"Average Epoch Training Loss {epoch} -> {average_epoch_training_loss}")
             print(f"Training-> Epoch{epoch}: {epoch_acc}")
@@ -54,12 +55,15 @@ class Trainer:
         
     def save_model(self):
         try:
+            final_path = os.path.join(self.model_directory, f"{self.model_path}.pth")
             torch.save(
                 {  "model_state_dict": self.model.state_dict(),},
-                os.path.join("artifacts",self.model_directory, self.model_path, ".pth")
+                final_path
             )
+            return final_path
         except Exception as e:
             print(f"Error in Saving Model: {e}")
+            return None
 
     
 
