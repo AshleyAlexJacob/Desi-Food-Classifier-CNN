@@ -6,7 +6,7 @@ from src.data.dataset import train_dataset, test_dataset
 # This prevents "Expected 'cuda' device type for generator but found 'cpu'" error
 DEVICE = 'cuda' if torch.cuda.is_available() else 'cpu'
 
-generator = torch.Generator(device='cpu')
+generator = torch.Generator(device=DEVICE)
 
 train_loader = DataLoader(
     train_dataset,
