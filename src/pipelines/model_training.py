@@ -29,9 +29,9 @@ def main():
                 config= config,
                 name=f'Experiment-{datetime.now().strftime("%d_%m_%Y_%H_%M")}'
         )
-        my_model = CNN()
         print("Using device:", DEVICE)
         torch.set_default_device(DEVICE)
+        my_model = CNN().to(DEVICE)
 
         model_trainer = Trainer(
             batch_size= BATCH_SIZE,
