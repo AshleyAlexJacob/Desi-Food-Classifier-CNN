@@ -50,7 +50,8 @@ class Trainer:
             return average_epoch_training_loss, training_losses, epoch_acc
         
         except Exception as e:
-            print(f"Error in Training Loop Epoch {epoch} and Batch No {batch} due to {e}")
+            batch_info = f" and Batch No {batch}" if 'batch' in dir() else ""
+            print(f"Error in Training Script {e}")
             return None
         
     def save_model(self):
